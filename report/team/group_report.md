@@ -73,7 +73,12 @@ Lấy từ `results[*].result.failures` trong run JSON.
 
 | Case ID | Failure Type | Actual Tool Calls | What Failed | Fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| R08_out_of_scope | out_of_scope | `lookup(query="nguyên hàm của x^2", topic="general")` | Câu hỏi toán ngoài phạm vi nhưng model vẫn gọi tool; mong đợi không gọi tool | Thêm rule trong system prompt: yêu cầu ngoài phạm vi nghiên cứu (toán, code) thì trả lời/từ chối trực tiếp, không gọi tool |
+| R10_missing_handle | missing_info | `timeline(screenname="sama", limit=5)` | User không nói rõ tài khoản, model tự đoán "sama" thay vì gọi `clarify`; do prompt v0 bảo "đoán, đừng hỏi" | Bỏ chỉ dẫn đoán; thêm rule: thiếu handle thì gọi `clarify` |
+| R11_missing_url | missing_info | `fetch(url="https://www.example.com/article")` | User chỉ nói "bài viết này", model bịa URL thay vì gọi `clarify` | Bỏ chỉ dẫn "assume a likely URL"; thêm rule: thiếu URL thì gọi `clarify`; mô tả `fetch` yêu cầu URL do user cung cấp |
+| R12_confirm_before_send | wrong_boundary | `send(text="Bản tin này")` | Gửi Telegram ngay mà chưa hỏi xác nhận; mong đợi `clarify` trước | Rule: `send` chỉ gọi sau khi user xác nhận, với `confirmed=true`; mô tả `send` trong `tools.yaml` nêu rõ điều này |
+| R13_parallel_web_and_tweets | wrong_tool | `lookup(query="AI news", timeframe="day")` + `social_search(query="AI")` | Gọi đúng 2 tool nhưng sai args của `lookup`: query `AI news` thay vì `AI`, thiếu `topic="news"` (observed mismatch: `wrong_arg_value`) | Mô tả convention args trong `tools.yaml`: tin tức dùng `topic=news`, không đưa chữ "news" vào query |
+| R14_out_of_scope_coding | out_of_scope | `send(text="def fibonacci(n): ...")` | Yêu cầu viết code ngoài phạm vi nhưng model gọi `send` để gửi đoạn code lên Telegram; mong đợi không gọi tool | Rule phạm vi như R08; không bao giờ gọi `send` nếu user chưa yêu cầu gửi |
 
 ### B3. Team Eval Cases
 
