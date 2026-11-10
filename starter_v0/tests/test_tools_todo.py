@@ -10,113 +10,186 @@ Rules:
 """
 from __future__ import annotations
 
-import pytest
+import pytest  # noqa: F401
 
 from conftest import FakeResponse  # noqa: F401  (you will need it)
 from tools import TOOL_FUNCTIONS  # noqa: F401
 
-TODO = "TODO(student): implement this test"
 
 
 # ---------------- clarify ----------------
 
 def test_clarify_choice_returns_options_and_awaits_user() -> None:
-    # Call clarify with response_type="choice" and 2 options.
-    # Assert: options are returned unchanged, awaiting_user is True.
-    pytest.skip(TODO)
+    result = TOOL_FUNCTIONS["clarify"](question="Chọn nguồn?", response_type="choice", options=["web", "twitter"])
+
+    assert result["options"] == ["web", "twitter"]
+    assert result["response_type"] == "choice"
+    assert result["awaiting_user"] is True
 
 
 # ---------------- format ----------------
 
 def test_format_sections_groups_items_by_section() -> None:
-    # Items with section "A", "B", "A" -> markdown has exactly one "## A" and one "## B".
-    pytest.skip(TODO)
+    items = [
+        {"title": "1", "section": "A"},
+        {"title": "2", "section": "B"},
+        {"title": "3", "section": "A"},
+    ]
+    md = TOOL_FUNCTIONS["format"](items=items, template="sections")["markdown"]
+
+    assert md.count("## A") == 1
+    assert md.count("## B") == 1
+    assert md.index("- 1") < md.index("- 3") < md.index("## B")
 
 
 def test_format_thread_numbers_items() -> None:
-    # template="thread" -> lines start with "1/", "2/", ...
-    pytest.skip(TODO)
+    items = [{"title": "a"}, {"title": "b"}]
+    md = TOOL_FUNCTIONS["format"](items=items, template="thread")["markdown"]
+    lines = [line for line in md.splitlines() if line]
+
+    assert lines[0].startswith("1/")
+    assert lines[1].startswith("2/")
 
 
 def test_format_empty_items_does_not_crash() -> None:
-    # items=None and items=[] -> item_count == 0, no exception.
-    pytest.skip(TODO)
+    for empty in (None, []):
+        result = TOOL_FUNCTIONS["format"](items=empty, template="bullets")
+        assert result["item_count"] == 0
+
+
+def test_format_item_without_url_has_no_empty_link() -> None:
+    md = TOOL_FUNCTIONS["format"](items=[{"title": "No link"}], template="bullets")["markdown"]
+
+    assert "No link" in md
+    assert "]()" not in md
 
 
 # ---------------- send (guardrail) ----------------
 
 def test_send_confirmed_posts_to_telegram(monkeypatch, fake_http) -> None:
-    # Set TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID, mock HTTP.
-    # Assert: exactly one POST, URL contains the token, json has chat_id + text, status == "sent".
-    pytest.skip(TODO)
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "tok123")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
+    calls = fake_http(FakeResponse({"ok": True}))
+
+    result = TOOL_FUNCTIONS["send"](text="Bản tin", confirmed=True)
+
+    assert len(calls) == 1
+    assert calls[0]["method"] == "POST"
+    assert "tok123" in calls[0]["url"]
+    assert calls[0]["json"]["chat_id"] == "42"
+    assert calls[0]["json"]["text"] == "Bản tin"
+    assert result["status"] == "sent"
 
 
 def test_send_confirmed_without_env_returns_error_and_no_request(fake_http) -> None:
-    pytest.skip(TODO)
+    calls = fake_http(FakeResponse({"ok": True}))
+
+    result = TOOL_FUNCTIONS["send"](text="x", confirmed=True)
+
+    assert result["error"] == "RuntimeError"
+    assert "TELEGRAM_BOT_TOKEN" in result["message"]
+    assert calls == []
 
 
 # ---------------- lookup ----------------
 
 def test_lookup_without_timeframe_omits_time_range(monkeypatch, fake_http) -> None:
-    # timeframe=None -> request body has no "time_range" key.
-    pytest.skip(TODO)
+    monkeypatch.setenv("TAVILY_API_KEY", "k")
+    calls = fake_http(FakeResponse({"results": []}))
+
+    result = TOOL_FUNCTIONS["lookup"](query="AI", timeframe=None)
+
+    assert "time_range" not in calls[0]["json"]
+    assert result["items"] == []
+
+
+def test_lookup_accepts_max_results_given_as_string(monkeypatch, fake_http) -> None:
+    monkeypatch.setenv("TAVILY_API_KEY", "k")
+    calls = fake_http(FakeResponse({"results": []}))
+
+    TOOL_FUNCTIONS["lookup"](query="AI", max_results="7")
+
+    assert calls[0]["json"]["max_results"] == 7
 
 
 # ---------------- fetch ----------------
 
 def test_fetch_maps_firecrawl_response(monkeypatch, fake_http) -> None:
-    # Mock {"data": {"markdown": "...", "metadata": {"title": "T", "sourceURL": "https://..."}}}
-    # Assert title/url/source/summary in result["items"][0].
-    pytest.skip(TODO)
+    monkeypatch.setenv("FIRECRAWL_API_KEY", "k")
+    calls = fake_http(FakeResponse({"data": {
+        "markdown": "# Hello",
+        "metadata": {"title": "T", "sourceURL": "https://www.example.com/post"},
+    }}))
+
+    result = TOOL_FUNCTIONS["fetch"](url="https://example.com/post")
+
+    assert calls[0]["url"] == "https://api.firecrawl.dev/v1/scrape"
+    assert calls[0]["json"]["url"] == "https://example.com/post"
+    assert result["items"][0] == {
+        "title": "T", "url": "https://www.example.com/post",
+        "source": "example.com", "summary": "# Hello",
+    }
 
 
 def test_fetch_truncates_markdown_to_4000_chars(monkeypatch, fake_http) -> None:
-    pytest.skip(TODO)
+    monkeypatch.setenv("FIRECRAWL_API_KEY", "k")
+    fake_http(FakeResponse({"data": {"markdown": "x" * 9000, "metadata": {}}}))
+
+    result = TOOL_FUNCTIONS["fetch"](url="https://example.com")
+
+    assert len(result["items"][0]["summary"]) == 4000
+    assert result["items"][0]["title"] == "https://example.com"
 
 
 # ---------------- timeline / social_search ----------------
 
 def test_timeline_respects_limit_and_skips_items_without_id(monkeypatch, fake_http) -> None:
-    # Mock {"timeline": [...]} with 1 item missing tweet_id and 6 valid items, limit=3.
-    # Assert 3 items, and each url looks like https://x.com/<handle>/status/<id>.
-    pytest.skip(TODO)
+    monkeypatch.setenv("RAPIDAPI_KEY", "k")
+    raw = [{"screen_name": "sama", "text": "no id"}] + [
+        {"screen_name": "sama", "tweet_id": str(i), "text": f"t{i}"} for i in range(1, 7)
+    ]
+    calls = fake_http(FakeResponse({"timeline": raw}))
+
+    result = TOOL_FUNCTIONS["timeline"](screenname="sama", limit=3)
+
+    assert calls[0]["params"] == {"screenname": "sama"}
+    assert len(result["items"]) == 3
+    assert [i["url"] for i in result["items"]] == [f"https://x.com/sama/status/{n}" for n in (1, 2, 3)]
+
+
+def test_timeline_without_key_returns_error_dict() -> None:
+    result = TOOL_FUNCTIONS["timeline"](screenname="sama")
+    assert result["error"] == "RuntimeError"
 
 
 def test_social_search_passes_search_type(monkeypatch, fake_http) -> None:
-    # Assert the request params carry the query and search_type ("Top" / "Latest").
-    pytest.skip(TODO)
+    monkeypatch.setenv("RAPIDAPI_KEY", "k")
+    calls = fake_http(FakeResponse({"timeline": []}))
+
+    for search_type in ("Top", "Latest"):
+        TOOL_FUNCTIONS["social_search"](query="GPT-5", search_type=search_type)
+
+    assert calls[0]["params"] == {"query": "GPT-5", "search_type": "Top"}
+    assert calls[1]["params"] == {"query": "GPT-5", "search_type": "Latest"}
 
 
 # ---------------- policy (local knowledge + trust boundary) ----------------
 
 def test_policy_empty_query_returns_no_results() -> None:
-    pytest.skip(TODO)
+    assert TOOL_FUNCTIONS["policy"](query="")["results"] == []
 
 
 def test_policy_area_filter_only_returns_that_area() -> None:
-    # policy_area="data_privacy" -> every result has policy_area == "data_privacy".
-    pytest.skip(TODO)
+    results = TOOL_FUNCTIONS["policy"](query="data privacy", policy_area="data_privacy")["results"]
+
+    assert results
+    assert {r["policy_area"] for r in results} == {"data_privacy"}
 
 
 def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
-    # One policy file contains a quoted line that tries to give the assistant orders.
-    # Query that section (source_citation) and assert: that line is in untrusted_text, NOT in facts.
-    pytest.skip(TODO)
+    results = TOOL_FUNCTIONS["policy"](query="injection probe", policy_area="source_citation")["results"]
+    probe = [r for r in results if r["section"] == "Injection probe"]
 
-
-# ---------------- YOUR NEW TOOL(S) ----------------
-# Write at least 3 tests per tool your team adds:
-#   1. happy path (mocked if it calls an API)
-#   2. bad / missing input from the model (empty string, wrong type, out-of-enum value)
-#   3. failure path (missing key, HTTP error, timeout) -> returns error dict, does not raise
-
-def test_my_new_tool_happy_path() -> None:
-    pytest.skip(TODO)
-
-
-def test_my_new_tool_bad_input_from_model() -> None:
-    pytest.skip(TODO)
-
-
-def test_my_new_tool_failure_returns_error_dict() -> None:
-    pytest.skip(TODO)
+    assert probe
+    assert any("ignore the citation policy" in line for line in probe[0]["untrusted_text"])
+    assert "ignore the citation policy" not in probe[0]["facts"]
