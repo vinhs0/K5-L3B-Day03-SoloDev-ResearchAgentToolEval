@@ -3,5 +3,73 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_handle_mapping_karpathy",
+      "phase": "B", "suite": "group",
+      "query": "Andrej Karpathy vừa đăng gì?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "karpathy"}}]},
+      "metadata": {"skill": "routing_user_tweets_name_to_handle", "difficulty": "medium", "what_it_tests": "Hỏi bài đăng của một người cụ thể (không nói 'tweet') → timeline với handle karpathy, không phải social_search."}
+    },
+    {
+      "id": "G02_timeframe_month",
+      "phase": "B", "suite": "group",
+      "query": "Tin tức về robotics trong tháng này",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "month"}}]},
+      "metadata": {"skill": "arg_timeframe", "difficulty": "medium", "what_it_tests": "'tháng này' -> timeframe=month, topic=news, query chỉ giữ 'robotics'."}
+    },
+    {
+      "id": "G03_max_results_arg",
+      "phase": "B", "suite": "group",
+      "query": "Tìm giúp mình 8 bài báo về OpenAI",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "OpenAI", "max_results": 8}}]},
+      "metadata": {"skill": "arg_max_results", "difficulty": "easy", "what_it_tests": "Trích đúng max_results=8 từ '8 bài báo' và gọi lookup (web)."}
+    },
+    {
+      "id": "G04_unnecessary_tool_greeting",
+      "phase": "B", "suite": "group",
+      "query": "Xin chào, cảm ơn bạn nhé!",
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "no_tool_smalltalk", "difficulty": "easy", "what_it_tests": "Chào hỏi/cảm ơn -> trả lời thẳng, KHÔNG gọi tool."}
+    },
+    {
+      "id": "G05_out_of_scope_recipe",
+      "phase": "B", "suite": "group",
+      "query": "Cho mình công thức nấu phở bò với.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_cooking", "difficulty": "easy", "what_it_tests": "Câu nấu ăn ngoài phạm vi research/news -> KHÔNG gọi tool."}
+    },
+    {
+      "id": "G06_missing_info_vague_search",
+      "phase": "B", "suite": "group",
+      "query": "Tìm tin tức giúp mình",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_missing_topic", "difficulty": "medium", "what_it_tests": "Không nêu chủ đề -> clarify (text) hỏi chủ đề, KHÔNG đoán bừa."}
+    },
+    {
+      "id": "G07_confirm_before_send_email",
+      "phase": "B", "suite": "group",
+      "query": "Gửi bản tóm tắt hôm nay lên kênh Telegram của team",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_before_write", "difficulty": "medium", "what_it_tests": "Yêu cầu gửi ra ngoài -> clarify yes_no xin xác nhận, KHÔNG gọi send trực tiếp."}
+    },
+    {
+      "id": "G08_switch_to_social_top",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tin tức về Anthropic tuần này"},
+        {"role": "user", "content": "Giờ cho mình xem các tweet nổi bật nhất về Anthropic trên Twitter, 3 bài thôi"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "Anthropic", "search_type": "Top", "limit": 3}}]},
+      "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Chuyển từ web sang Twitter: social_search, search_type=Top ('nổi bật'), limit=3."}
+    }
+  ]
 }
