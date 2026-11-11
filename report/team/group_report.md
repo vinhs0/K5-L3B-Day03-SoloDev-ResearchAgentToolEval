@@ -28,7 +28,9 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 
 > Dán link public để team khác mở thử ngay. Cách deploy nhanh bằng Cloudflare Tunnel xem README. Nếu deploy Vercel/Streamlit Cloud thì dán link đó.
 >
-> URL:
+> URL: https://alfred-multimedia-ebooks-beijing.trycloudflare.com
+>
+> (Cloudflare quick tunnel -> `streamlit run app.py` trên máy local, cổng 8501. Link chỉ sống khi máy chạy UI và `cloudflared tunnel --protocol http2 --url http://localhost:8501` còn mở.)
 
 ### A2. Tool agent có
 
