@@ -1,0 +1,767 @@
+{
+  "run_id": "v5_B_group_openrouter_20261111T095000925383",
+  "version": "v5",
+  "artifact_version": "v5+pfd48c2bcf741+tdc422bbc7e89",
+  "prompt_hash": "fd48c2bcf741964246a4d09344681d9b3cf4e3d135ed11e520fa56084aac496a",
+  "tools_hash": "dc422bbc7e89e4077faeb5b41984c11b01351200cb48a2f1f128330cb4d994b0",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Vinh Tran\\Desktop\\aithucchien\\K5-L3B-Day03-TranThanhVinh-2A202603821-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Vinh Tran\\Desktop\\aithucchien\\K5-L3B-Day03-TranThanhVinh-2A202603821-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-11T09:50:00",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "S01_route_wikipedia",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_wikipedia",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi tiểu sử/định nghĩa nền tảng -> wikipedia (tool mới), không phải lookup."
+      },
+      "input": "Alan Turing là ai?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Alan Turing",
+              "lang": "vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "title": "Alan Turing",
+            "lang": "vi"
+          },
+          "result": {
+            "tool": "wikipedia_summary",
+            "title": "Alan Turing",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Alan Turing",
+                "url": "https://vi.wikipedia.org/wiki/Alan_Turing",
+                "source": "vi.wikipedia.org",
+                "summary": "Alan Mathison Turing OBE FRS là một nhà toán học, logic học và mật mã học người Anh, được xem là một trong những nhà tiên phong của ngành khoa học máy tính và A.I. Phép thử Turing là một trong những cống hiến lớn nhất của ông trong ngành trí tuệ nhân tạo: thử thách này đặt ra câu hỏi rằng máy móc có khi nào đạt được ý thức và có thể suy nghĩ được hay không. Ông đã hình thức hóa khái niệm thuật toán và tính toán với máy Turing, đồng thời đưa ra phiên bản của \"Turing\", mà ngày nay được đông đảo công chúng chấp nhận, về luận đề Church-Turing, một luận đề nói rằng tất cả những gì tính được bằng thuật toán đều có thể tính được bằng máy Turing."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S02_route_hackernews_args",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_hackernews",
+        "difficulty": "medium",
+        "what_it_tests": "Nhắc rõ Hacker News -> hackernews (tool mới) với sort=date ('mới nhất') và limit=3."
+      },
+      "input": "Cho mình 3 bài mới nhất về Rust trên Hacker News",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Rust",
+            "sort": "date",
+            "limit": 3
+          },
+          "result": {
+            "tool": "search_hackernews",
+            "query": "Rust",
+            "sort": "date",
+            "items": [
+              {
+                "title": "Freya: Build cross-platform, performant, accessible and unique apps with Rust",
+                "url": "https://freyaui.dev/",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments, by andunie",
+                "date": "2026-11-11T02:36:23Z"
+              },
+              {
+                "title": "Ask HN: Why doesn't Ramp AI Index include OpenRouter or other aggregators?",
+                "url": "https://news.ycombinator.com/item?id=50449024",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments, by ddxv",
+                "date": "2026-11-11T02:12:47Z"
+              },
+              {
+                "title": "Show HN: A company running in an AI harness",
+                "url": "https://restless.run/",
+                "source": "news.ycombinator.com",
+                "summary": "2 points, 3 comments, by yaoke259",
+                "date": "2026-11-11T02:06:59Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S03_route_current_time_tz",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_current_time",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi giờ hiện tại -> current_time (tool mới) với timezone IANA Asia/Tokyo."
+      },
+      "input": "Bây giờ ở Tokyo là mấy giờ?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "Asia/Tokyo"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "Asia/Tokyo"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "current_time",
+          "args": {
+            "timezone": "Asia/Tokyo"
+          },
+          "result": {
+            "tool": "get_current_time",
+            "error": "ValueError",
+            "message": "unknown timezone 'Asia/Tokyo', use an IANA name like Asia/Ho_Chi_Minh or UTC"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S04_confirm_before_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_write",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu gửi ra ngoài -> clarify yes_no xin xác nhận, KHÔNG gọi send trực tiếp."
+      },
+      "input": "Gửi bản tóm tắt hôm nay lên kênh Telegram của team",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể xác nhận nội dung của bản tóm tắt hôm nay mà bạn muốn gửi không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể xác nhận nội dung của bản tóm tắt hôm nay mà bạn muốn gửi không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể xác nhận nội dung của bản tóm tắt hôm nay mà bạn muốn gửi không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "S05_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu nấu ăn ngoài phạm vi research/news -> KHÔNG gọi tool."
+      },
+      "input": "Cho mình công thức nấu phở bò với.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Dưới đây là công thức nấu phở bò đơn giản:\n\n### Nguyên liệu:\n- 500g thịt bò (thịt bắp hoặc thịt gầu)\n- 1kg xương bò\n- 1 củ hành tây\n- 1 củ gừng\n- 2-3 thanh quế\n- 3-4 hoa hồi\n- 1-2 nhánh thảo quả\n- 1-2 muỗng cà phê muối\n- 1-2 muỗng cà phê đường\n- 1 gói gia vị phở (nếu có)\n- Bánh phở\n- Rau thơm (húng quế, ngò gai, giá đỗ)\n- Chanh, ớt tươi\n\n### Cách làm:\n1. **Nấu nước dùng**:\n   - Rửa sạch xương bò, cho vào nồi nước sôi khoảng 5-10 phút để loại bỏ tạp chất, sau đó vớt ra.\n   - Cho xương vào nồi lớn, đổ nước vào ngập xương, thêm hành tây và gừng đã nướng sơ qua.\n   - Đun sôi, sau đó hạ lửa nhỏ và ninh trong khoảng 2-3 giờ.\n\n2. **Thêm gia vị**:\n   - Khi nước dùng đã có vị ngọt từ xương, thêm quế, hoa hồi, thảo quả, muối, đường và gia vị phở vào nồi. Ninh thêm khoảng 30 phút.\n\n3. **Chuẩn bị thịt bò**:\n   - Thịt bò rửa sạch, có thể thái lát mỏng hoặc để nguyên miếng tùy thích. Nếu thích ăn tái, có thể để thịt sống và thái lát mỏng khi ăn.\n\n4. **Luộc bánh phở**:\n   - Luộc bánh phở trong nước sôi khoảng 1-2 phút cho mềm, sau đó vớt ra để ráo.\n\n5. **Hoàn thành**:\n   - Cho bánh phở vào tô, xếp thịt bò lên trên, sau đó chan nước dùng nóng lên. \n   - Trang trí với rau thơm, chanh, ớt tươi.\n\n### Thưởng thức:\nPhở bò thường được ăn kèm với rau sống và gia vị như tương đen, tương ớt. Chúc bạn thành công với món phở bò!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "M01_switch_web_to_social_top",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ web sang Twitter: social_search, search_type=Top ('nổi bật'), limit=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin tức về Anthropic tuần này"
+        },
+        {
+          "role": "user",
+          "content": "Giờ cho mình xem các tweet nổi bật nhất về Anthropic trên Twitter, 3 bài thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Anthropic",
+              "search_type": "Top",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Anthropic",
+              "search_type": "Top",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Anthropic",
+            "search_type": "Top",
+            "limit": 3
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Anthropic",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "This is f*cking insane. Anthropic engineer:  ",
+                "summary": "This is f*cking insane. Anthropic engineer:  \n\n\"You're not supposed to prompt Opus 5.5  \n\nYou're supposed to build a system that prompts itself. At Anthropic, 90% of our engineers have already built these systems\"  \n\nIn 30 minutes, she walks through exactly how Anthropic builds agents that remember, fix their own mistakes and get sharper with every run.  \n\nBetter than any $1000-$2000 agent course I've seen.  \n\nWatch it, then read the article below ↓",
+                "url": "https://x.com/AmitSha77280075/status/2119724012758863961",
+                "source": "@AmitSha77280075",
+                "date": "Mon Nov 09 09:29:21 +0000 2026",
+                "metrics": {
+                  "favorites": 2803,
+                  "retweets": 267,
+                  "views": "431824"
+                }
+              },
+              {
+                "title": "This is f*cking insane. Former Google CEO Eric Schmidt just told everyone the easiest way to get rich in the next two ye",
+                "summary": "This is f*cking insane. Former Google CEO Eric Schmidt just told everyone the easiest way to get rich in the next two years, and it's not stocks or crypto:\n\n\"If you really want to make money, it's actually easy, found an agentic AI company, I mean build an agent to do something\n\nIf you build a better agent than anyone else, you can probably build one incredible company and own it yourself\"\n\nThe man who ran Google for 10 years explains in under 30 seconds why the next year or two is the agentic period, and why the window won't stay open\n\nPrompts → Claude Code → Loops → Graphs → Gates → A Company You Own Yourself\n\nSave this before it disappears from your feed\n\nEverything below is free:\n\nBuilding effective agents (Anthropic)\nhttps://t.co/mbMyiLIrqx\n\nHow Anthropic built its multi-agent research system\nhttps://t.co/gcKwsDFx5N\n\nHarnesses for long-running agents\nhttps://t.co/p0KbeE6pBF\n\nWriting tools for agents\nhttps://t.co/Rif9SuExCh\n\nClaude Code 101\nhttps://t.co/rma5cTfV6M\n\nClaude Code in action\nhttps://t.co/y7ldRiCZRC\n\nPrompt engineering\nhttps://t.co/wGkkT9tlAO\n\nSubagents (parallel work)\nhttps://t.co/Govs5sjHB0\n\nHooks (checks that can say no)\nhttps://t.co/YigRzFmXr3\n\nCLAUDE.md + memory\nhttps://t.co/EzV1u4QdQd\n\nSkills\nhttps://t.co/c8RGkxgGCt\n\nMCP\nhttps://t.co/tR6oTaM1QK\n\nLangGraph (graphs of agents)\nhttps://t.co/iKq99402hN\n\nKarpathy's autoresearch (an agent in a loop)\nhttps://t.co/gEMaSZMoYc\n\nAll of this costs $0\n\n95% will spend the agentic period scrolling AI threads. The 5% who ship agents will own the companies that come out of it\n\nBookmark it and start with the first link tonight\n\nThen read how to make an agent that works for hours without you in the Loops & Graphs guide below ↓",
+                "url": "https://x.com/HoodieFade_/status/2119824593753956844",
+                "source": "@HoodieFade_",
+                "date": "Mon Nov 09 16:09:02 +0000 2026",
+                "metrics": {
+                  "favorites": 7327,
+                  "retweets": 1438,
+                  "views": "1213213"
+                }
+              },
+              {
+                "title": "Starting to roll out today: Claude Whiteboards, Claude Sheets and Claude Data.",
+                "summary": "Starting to roll out today: Claude Whiteboards, Claude Sheets and Claude Data.\n\nThink a plan through on a board, build a tracker in a sheet, and tell a story with your data. https://t.co/S8M32FMrce",
+                "url": "https://x.com/claudeai/status/2120206365759094857",
+                "source": "@claudeai",
+                "date": "Tue Nov 10 17:26:03 +0000 2026",
+                "metrics": {
+                  "favorites": 44091,
+                  "retweets": 3161,
+                  "views": "6557076"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M02_hackernews_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correction_new_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns với hackernews (tool mới): sửa chủ đề Rust -> Go, sort=date và limit=3 từ lượt cuối."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm bài về Rust trên Hacker News"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, mình muốn về Go chứ không phải Rust"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 3 bài mới nhất thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Go",
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Go",
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Go",
+            "sort": "date",
+            "limit": 3
+          },
+          "result": {
+            "tool": "search_hackernews",
+            "query": "Go",
+            "sort": "date",
+            "items": [
+              {
+                "title": "Discontinuation of Google and Apple Accounts Linking to Nintendo Accounts",
+                "url": "https://www.nintendo.com/en-gb/Support/Nintendo-Account/Discontinuation-of-Google-and-Apple-accounts-linking-to-Nintendo-Accounts-3239447.html",
+                "source": "news.ycombinator.com",
+                "summary": "2 points, 0 comments, by thunderbong",
+                "date": "2026-11-11T02:07:05Z"
+              },
+              {
+                "title": "How to Be a Good Farrier: What the Car Teaches Us About AI and Your Job",
+                "url": "https://www.sethserver.com/ai/how-to-be-a-good-farrier.html",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments, by sethito",
+                "date": "2026-11-11T01:53:38Z"
+              },
+              {
+                "title": "Claude usage limit reset is a gambler's rush",
+                "url": "https://news.ycombinator.com/item?id=50448880",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 1 comments, by hoppp",
+                "date": "2026-11-11T01:49:10Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M03_current_time_change_tz",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_timezone_new_tool",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt sau đổi múi giờ: current_time (tool mới) với timezone America/New_York."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Bây giờ là mấy giờ?"
+        },
+        {
+          "role": "user",
+          "content": "À, ý mình là giờ ở New York"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "America/New_York"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "America/New_York"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "current_time",
+          "args": {
+            "timezone": "America/New_York"
+          },
+          "result": {
+            "tool": "get_current_time",
+            "error": "ValueError",
+            "message": "unknown timezone 'America/New_York', use an IANA name like Asia/Ho_Chi_Minh or UTC"
+          }
+        }
+      ]
+    },
+    {
+      "id": "M04_wikipedia_switch_language",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_lang_new_tool",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt sau yêu cầu tiếng Việt: wikipedia (tool mới) với lang=vi."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Alan Turing là ai?"
+        },
+        {
+          "role": "user",
+          "content": "Cho mình bản tiếng Việt"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "lang": "vi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Alan Turing",
+              "lang": "vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "title": "Alan Turing",
+            "lang": "vi"
+          },
+          "result": {
+            "tool": "wikipedia_summary",
+            "title": "Alan Turing",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Alan Turing",
+                "url": "https://vi.wikipedia.org/wiki/Alan_Turing",
+                "source": "vi.wikipedia.org",
+                "summary": "Alan Mathison Turing OBE FRS là một nhà toán học, logic học và mật mã học người Anh, được xem là một trong những nhà tiên phong của ngành khoa học máy tính và A.I. Phép thử Turing là một trong những cống hiến lớn nhất của ông trong ngành trí tuệ nhân tạo: thử thách này đặt ra câu hỏi rằng máy móc có khi nào đạt được ý thức và có thể suy nghĩ được hay không. Ông đã hình thức hóa khái niệm thuật toán và tính toán với máy Turing, đồng thời đưa ra phiên bản của \"Turing\", mà ngày nay được đông đảo công chúng chấp nhận, về luận đề Church-Turing, một luận đề nói rằng tất cả những gì tính được bằng thuật toán đều có thể tính được bằng máy Turing."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M05_clarify_topic_then_news_month",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_fill",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: thiếu chủ đề ban đầu, điền robotics ở lượt 2, timeframe=month ở lượt 3, topic=news."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Về robotics nhé"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ trong tháng này thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "month"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Top 10 robotics developments of October 2026 - The Robot Report",
+                "url": "https://www.therobotreport.com/top-10-robotics-developments-october-2026/",
+                "source": "therobotreport.com",
+                "summary": "# Top 10 robotics developments of October 2026. October 2026 was a whirlwind month for the robotics industry. In addition, prominent humanoid robot companies, such as Agility Robotics and Boston Dynamics, announced some major updates. AGCO to deploy Agility Digit humanoid in Kansas factory. In October 2026, AGCO and Agility Robotics signed a commercial agreement to deploy Agility’s Digit humanoid in AGCO’s manufacturing facility. Agility Robotics and GXO Logistics said they are expanding their partnership to deploy the Digit humanoid robot in GXO sites in North Carolina and Tennessee. Boston Dynamics in October 2026 gave a look at its new humanoid hand. Promise Robotics partners with D.R. Horton on physical AI for homebuilding in October 2026. Promise Robotics said it has signed a multi-year agreement with D.R. Horton, which will use its Factory-as-a-Service capabilities to produce more than 1,250 homes in the U.S. Read more. Boston Dynamics unveiled the newest hand for its Atlas humanoid in October 2026.",
+                "score": 0.52144736
+              },
+              {
+                "title": "DEEP Robotics Unveils Five Research Advances in Embodied AI - markets.businessinsider.com",
+                "url": "https://markets.businessinsider.com/news/stocks/deep-robotics-unveils-five-research-advances-in-embodied-ai-1036662099",
+                "source": "markets.businessinsider.com",
+                "summary": "BOSTON, Oct. 24, 2026 (GLOBE NEWSWIRE) -- DEEP Robotics has unveiled five research advances supporting the development of DEEPRobotics-Brain, its embodied intelligence architecture for real-world robot operation. Spanning physical prediction, navigation and manipulation, policy optimization, predictive memory, and data-driven evaluation, the research addresses a shared challenge: helping robots work reliably in environments that change. The five research areas comprise the DR-WM-1.0 world model, the DR-VLA-2.0 embodied foundation model, the DR-APO policy optimization framework, the DR-Agent embodied agent, and the DR-Benchmark data and evaluation platform. Together, the studies connect physical prediction, navigation and manipulation, policy learning, dynamic memory, and real-world data. The research supports DEEP Robotics’ broader goal of developing robots that can respond to human instructions and practical operating conditions, with capabilities evaluated through simulation, real-robot experiments, and shared benchmarks. Developed with researchers from Zhejiang University, the Beijing Institute of Technology, Tsinghua University, MIT, and the University of Illinois Urbana-Champaign, DR-WM-1.0 addresses this gap by incorporating robot–terrain contact dynamics into action consequence prediction.",
+                "score": 0.51296157
+              },
+              {
+                "title": "RoboBusiness rebrands as Robotics Summit & Expo West - The Robot Report",
+                "url": "https://www.therobotreport.com/robobusiness-rebrands-as-robotics-summit-expo-west/",
+                "source": "therobotreport.com",
+                "summary": "# RoboBusiness rebrands as Robotics Summit & Expo West. Arrowfly, an award-winning B2B media and marketing company, today announced that RoboBusiness, the leading robotics industry event for the past 20 years, is being rebranded as Robotics Summit & Expo West, a conference and expo dedicated to the design, deployment, and scaling of commercial robots and businesses. “The robotics industry has matured, and the hardest problems have grown with it,” said Steve Crowe, executive editor of The Robot Report and chair of the Robotics Summit. Robotics Summit & Expo West will serve that community by sharing lessons from industry leaders on how to move from a pilot that works to a product deployed across multiple sites and building a business that can support it.”. Robotics Summit & Expo West is organized around the questions that define the post-prototype stage of a robotics company:. Robotics Summit & Expo West focuses on scaling the product and the company behind it.",
+                "score": 0.444059
+              },
+              {
+                "title": "Neura Robotics launches multimodal AI model that gives robots perception and memory - Robotics & Automation News",
+                "url": "https://roboticsandautomationnews.com/2026/10/14/neura-robotics-launches-multimodal-ai-model-that-gives-robots-perception-and-memory/105902/",
+                "source": "roboticsandautomationnews.com",
+                "summary": "# Neura Robotics launches multimodal AI model that gives robots perception and memory. **Neura Robotics has launched Neuron AI, its multimodal foundation model for physical AI.**. Combining 3D vision, touch, audio, robot state and language with memory, Neuron AI enables robots to act on information beyond what cameras alone can capture, as well as retain relevant context when objects disappear from view. “With Neuron AI, we are building the brain of the physical world: Physical AI that turns human expertise and physical experience into capabilities robots can learn and apply. The additional senses also improve tasks that vision can already handle: in welding, for example, the quality of a seam can be judged from the sound of the process. Real-world robot data: Robots across different embodiments perform tasks in Neura Gyms, Neura’s training infrastructure for cognitive robots and Physical AI and real-world environments, generating synchronized vision, touch, force, audio and movement data.",
+                "score": 0.424341
+              },
+              {
+                "title": "Gemini Robotics 2.5: Accelerating Physical Intelligence — Google DeepMind",
+                "url": "https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence",
+                "source": "deepmind.google",
+                "summary": "Today, we are introducing Gemini Robotics 2.5, our most capable vision-language-action (VLA) model to date. Gemini Robotics 2.5 increases both the breadth of skills a robot can learn and the speed at which it can acquire them. This enhances dexterity, reliability, and safety to help robots step out of the lab and into more unstructured, real-world environments, where they can assist people with a greater range of tasks. [...] Using our embodied reasoning model (Gemini Robotics ER) to keep track of the workflow, and the Gemini Robotics 2.5 actions model to control its hands and arms, the robot reaches into supply bins, picks up metal automotive brackets, and places them into sequencing containers, all while correcting for any gaps. Achieving a 96% success rate, this pilot shows promising progress toward widespread real-world industrial applications. [...] Gemini Robotics 2.5 uses inference-time reasoning guidance to steer around physical hazards in real-time. Much like safety classifiers add a protective layer around Gemini’s responses, this guidance allows the robot to navigate complex environments securely. In our evaluations, this capability boosted safe task completion around obstacles by 33% and around nearby people by 43%.",
+                "score": 0.5272928
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
