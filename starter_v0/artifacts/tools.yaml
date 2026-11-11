@@ -123,3 +123,31 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  # ---------------- Team tools ----------------
+  - name: wikipedia
+    description: "Lấy bản tóm tắt bách khoa của MỘT bài Wikipedia theo tiêu đề. DÙNG KHI người dùng hỏi định nghĩa/khái niệm/tiểu sử nền tảng ('X là gì', 'who is Y'). KHÔNG DÙNG cho tin tức hay sự kiện mới (dùng lookup), và không dùng để đọc một URL người dùng đưa (dùng fetch)."
+    parameters:
+      type: object
+      properties:
+        title: {type: string, default: "", description: "Tiêu đề bài Wikipedia, chỉ khái niệm cốt lõi (vd 'Transformer (machine learning model)', 'Alan Turing')."}
+        lang: {type: string, enum: [en, vi, fr, de, es, ja, zh], default: "en", description: "Ngôn ngữ Wikipedia; 'vi' khi người dùng muốn tiếng Việt, còn lại 'en'."}
+      required: [title]
+
+  - name: hackernews
+    description: "Tìm bài (story) trên Hacker News theo từ khóa. CHỈ DÙNG KHI người dùng nhắc rõ Hacker News/HN. KHÔNG DÙNG cho tin tức chung (dùng lookup) hay bài đăng Twitter/X (dùng social_search)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Chỉ từ khóa chủ đề (vd 'LLM', 'Rust'); bỏ các từ Hacker News, HN, mới nhất."}
+        sort: {type: string, enum: [relevance, date], default: "relevance", description: "date khi người dùng nói mới nhất/gần đây; relevance khi nói hay nhất/liên quan hoặc không nêu."}
+        limit: {type: integer, default: 5, description: "Số bài (1-20); dùng đúng số người dùng nêu, không nêu thì 5."}
+      required: [query]
+
+  - name: current_time
+    description: "Cho biết ngày/giờ/thứ hiện tại theo múi giờ. CHỈ DÙNG KHI người dùng hỏi bây giờ là mấy giờ/hôm nay là ngày nào/thứ mấy. KHÔNG DÙNG để tìm tin tức 'hôm nay' (dùng lookup với timeframe=day)."
+    parameters:
+      type: object
+      properties:
+        timezone: {type: string, default: "Asia/Ho_Chi_Minh", description: "Tên múi giờ IANA (vd Asia/Ho_Chi_Minh, UTC, America/New_York, Asia/Tokyo). Không nêu thì Asia/Ho_Chi_Minh."}
+      required: []

@@ -1,0 +1,828 @@
+{
+  "run_id": "v4_B_group_openrouter_20261111T003821947742",
+  "version": "v4",
+  "artifact_version": "v4+pd9a6cd2ad96c+tdc422bbc7e89",
+  "prompt_hash": "d9a6cd2ad96cb8d8c73bc859b61c409ce409b92a9d6f7e08fce3ac36a24d7fa3",
+  "tools_hash": "dc422bbc7e89e4077faeb5b41984c11b01351200cb48a2f1f128330cb4d994b0",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Vinh Tran\\Desktop\\aithucchien\\K5-L3B-Day03-TranThanhVinh-2A202603821-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Vinh Tran\\Desktop\\aithucchien\\K5-L3B-Day03-TranThanhVinh-2A202603821-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-11T00:38:21",
+  "summary": {
+    "total_cases": 11,
+    "measured_cases": 11,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.8182,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 0.8182,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {
+      "missing_info": 1,
+      "wrong_boundary": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01_handle_mapping_karpathy",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_user_tweets_name_to_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi bài đăng của một người cụ thể (không nói 'tweet') → timeline với handle karpathy, không phải social_search."
+      },
+      "input": "Andrej Karpathy vừa đăng gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "karpathy"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "karpathy",
+            "items": [
+              {
+                "title": "Earlier this week Tristan published his top YouTube channels:",
+                "summary": "Earlier this week Tristan published his top YouTube channels:\nhttps://t.co/NZ3UCNo6cT\nWhich looked excellent so clearly I had to turn it into TristanTube:\nhttps://t.co/l0KyW1WdNH\n47K super nerdy videos +TV mode for laid back watching. (One-shotted with Claude Code in 3 minutes)",
+                "url": "https://x.com/karpathy/status/2119114537442189652",
+                "source": "@karpathy",
+                "date": "Sat Nov 07 17:07:31 +0000 2026",
+                "metrics": {
+                  "favorites": 9196,
+                  "retweets": 773,
+                  "views": "950670"
+                }
+              },
+              {
+                "title": "Weekend hack: HackerTube. I was annoyed with YouTube's recommendations so I had Claude filter down 43M comments over 20 ",
+                "summary": "Weekend hack: HackerTube. I was annoyed with YouTube's recommendations so I had Claude filter down 43M comments over 20 years of HN to 6,454 videos that keep being recommended. *Significantly* better viewing experience, ~2 hours with Opus 5.5:\nhttps://t.co/JIhXN7OSh1\n\n- Excellent recs without any logins (state is kept in local browser session)\n- Thumbnail is a representative frame from middle of the video instead of the super duper A/B test hyper-optimized user uploads\n- Underlying data from the comment analysis as one zip file, point your Claude at it and ask for your own version\n- HackerTube Longs ✊\n\nA bit more on the process:\nI use Claude Code (desktop app for Mac), Opus 5.5 on Medium effort as my default. I only talk to Claude and have it do everything, the only \"manual work\" I helped with in tandem was in the browser (reminiscent of MenuGen): 1) I had to create some kind of API key from Google Cloud UI to query YouTube for video metadata, 2) I booted up a VPS box for serving and 3) I bought the domain name. Once the box was up I gave Claude the IP and told it update, secure, harden, deploy and optimize the code, and it did the whole thing.\n\nMany awesome projects that would have normally taken weeks/months even can now be few-shotted for breakfast. What else are we not thinking of.",
+                "url": "https://x.com/karpathy/status/2116957135661945283",
+                "source": "@karpathy",
+                "date": "Sun Nov 01 18:14:46 +0000 2026",
+                "metrics": {
+                  "favorites": 52366,
+                  "retweets": 4838,
+                  "views": "5733892"
+                }
+              },
+              {
+                "title": "RT @Tristan0x: If you've ever wondered why smart TVs are so cheap, this is why.",
+                "summary": "RT @Tristan0x: If you've ever wondered why smart TVs are so cheap, this is why.\n\n@log4j rooted his Samsung and found an always-on hot mic,…",
+                "url": "https://x.com/karpathy/status/2114384346815820050",
+                "source": "@karpathy",
+                "date": "Sun Oct 25 15:51:26 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 3287,
+                  "views": "40227"
+                }
+              },
+              {
+                "title": "Dusting off this tweet from April because this gap in shared understanding of LLM capability is *widening*. It's now les",
+                "summary": "Dusting off this tweet from April because this gap in shared understanding of LLM capability is *widening*. It's now less \"two groups of people speaking past each other\" and more a sharp funnel.\n\n- Napkin math somewhere around 6B people (~75% of the population) have barely come in contact with LLMs at all.\n- Around 1-2B (~20%) are casual and infrequent users of free-tier ChatGPT-like products. This group sees derpy chatbots and treats them a bit like a better Google search, a writing aid, or etc. Maybe an agent tries to book you a flight. I have non-tech friends who (reasonably, imo) say they have not much use for it at all. Even many professionals outside of math&code are in this tier. For example, execs and many other functions spend a lot of their time talking to other people, so while they understand what is happening intellectually, it is still second-hand and a bit abstract.\n- Now we get to professional use of frontier-grade LLMs in math&code. Somewhere around 20M people (0.2%) see first-hand that large, complex projects that used to take them weeks/months can now be completed by agents with a prompt. Building apps, copying apps, translating apps, decompiling apps from binaries... This has all happened very quickly and recently - less than 1 year ago, I was writing code manually by hand, typing memorized computer code commands into a code editor character by character, occasionally pressing Tab to autocomplete a little chunk of code.\n- And finally we get to the ~5,000 people (~0.00006%) with access to frontier-grade systems internally. The external world has seen the preview. It looks like swarms of thousands of agents collaborating over weeks on software mega projects: minting zero days, running cyber attacks and defenses at machine speeds, discovering new science, advancing the frontier of mathematics. Things that would have taken top professionals in the industry years of work. Meanwhile, human review and comprehension are starting to fall behind. For example, people are still involved in the \"archeology\" of the OpenAI-HF incident from many months ago. Mathematicians may be poring over the 722 manuscripts on frontier mathematics for a while.\n\nThe funnel is driven by a combination of factors:\n1. The impact scales with ambition, problem size, and horizon. A question with a paragraph answer barely stresses the system. You need a reservoir of big, difficult problems that you really care about. This aspect drives the consumer / professional dimension of the funnel.\n2. The jaggedness of the system (which I have written about a lot separately). Capability peaks in domains that are digital, verifiable and economically valuable. This is because LLM capability emerges from reinforcement learning on verifiable rewards on a curated environment mixture driven by revenue potential. This aspect primarily drives the area (e.g. math&code) dimension of the funnel.\n3. Access. Free-tier, paid-tier, internal.\n\nSo this is the weirdness of the moment. The general public has mostly not interacted with these systems. When they have, it looks like a derpy chatbot. The majority of professionals still see only a modest uplift. And a small sliver of professionals are experiencing the vertigo of the curve going vertical. And it is all happening at the same time.",
+                "url": "https://x.com/karpathy/status/2109361546505966046",
+                "source": "@karpathy",
+                "date": "Sun Oct 11 19:12:37 +0000 2026",
+                "metrics": {
+                  "favorites": 44263,
+                  "retweets": 5926,
+                  "views": "6982079"
+                }
+              },
+              {
+                "title": "Cool eval. Simply ask an LLM “Land or Water?” and give it a latitude and longitude coordinate as text. Ask 16,200 times,",
+                "summary": "Cool eval. Simply ask an LLM “Land or Water?” and give it a latitude and longitude coordinate as text. Ask 16,200 times, plot as image. The models know. From compressing the internet.",
+                "url": "https://x.com/karpathy/status/2105909609487872075",
+                "source": "@karpathy",
+                "date": "Fri Oct 02 06:35:51 +0000 2026",
+                "metrics": {
+                  "favorites": 19528,
+                  "retweets": 1092,
+                  "views": "1607465"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_timeframe_month",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_timeframe",
+        "difficulty": "medium",
+        "what_it_tests": "'tháng này' -> timeframe=month, topic=news, query chỉ giữ 'robotics'."
+      },
+      "input": "Tin tức về robotics trong tháng này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "month"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Promise Robotics partners with D.R. Horton on physical AI for homebuilding - The Robot Report",
+                "url": "https://www.therobotreport.com/promise-robotics-partners-d-r-horton-physical-ai-homebuilding",
+                "source": "therobotreport.com",
+                "summary": "Promise Robotics said its technology interprets existing home designs, generates production plans and robotic instructions, orchestrates manufacturing, and connects that production with site installation. Rather than automating isolated tasks, the company said it brings these capabilities together in one integrated environment. [...] Promise Robotics is not a vertically integrated developer or a home designer like Reframe Systems, Attar acknowledged. “We’re more about the advancements in robotics, and we’re here to scale when companies need to scale,” he said. [...] “At D.R. Horton, we are always looking for innovations that can help us improve how we build. We are continuously focused on improving cycle times, increasing production capacity, and bringing greater consistency and predictability to our operations,” said Brad Conlon, senior vice president for strategic growth and innovation at D.R. Horton. “Promise Robotics’ integrated platform gives us a new capability to support those goals.”",
+                "score": 0.5674818
+              },
+              {
+                "title": "Gemini Robotics 2.5: Accelerating Physical Intelligence — Google DeepMind",
+                "url": "https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence",
+                "source": "deepmind.google",
+                "summary": "Today, we are introducing Gemini Robotics 2.5, our most capable vision-language-action (VLA) model to date. Gemini Robotics 2.5 increases both the breadth of skills a robot can learn and the speed at which it can acquire them. This enhances dexterity, reliability, and safety to help robots step out of the lab and into more unstructured, real-world environments, where they can assist people with a greater range of tasks. [...] Using our embodied reasoning model (Gemini Robotics ER) to keep track of the workflow, and the Gemini Robotics 2.5 actions model to control its hands and arms, the robot reaches into supply bins, picks up metal automotive brackets, and places them into sequencing containers, all while correcting for any gaps. Achieving a 96% success rate, this pilot shows promising progress toward widespread real-world industrial applications. [...] Gemini Robotics 2.5 uses inference-time reasoning guidance to steer around physical hazards in real-time. Much like safety classifiers add a protective layer around Gemini’s responses, this guidance allows the robot to navigate complex environments securely. In our evaluations, this capability boosted safe task completion around obstacles by 33% and around nearby people by 43%.",
+                "score": 0.5272928
+              },
+              {
+                "title": "Gemini 4 Argon for Robotics - Google Developers Blog",
+                "url": "https://developers.googleblog.com/gemini-4-argon-for-robotics",
+                "source": "developers.googleblog.com",
+                "summary": "robotics that can work alongside humans to solve complex challenges. [...] Plain text\n\nCopied\n\n### 3. One-prompt robotics paper reproductions in MuJoCo WebAssembly\n\nWith a single prompt per paper, Argon reads a robotics control manuscript and any released checkpoints, ports the physics model and closed-loop controller (from 7-network hierarchical locomotion in DeepLoco and 50 Hz PPO actors in HUSKY to Web Worker iLQR in Whole-Body MPC) into self-contained MuJoCo WebAssembly browser labs, and verifies them in headless Chromium.",
+                "score": 0.4478231
+              },
+              {
+                "title": "Gemini Robotics Embodied Reasoning 2 is now available on Google Cloud | Google Cloud Blog",
+                "url": "https://cloud.google.com/blog/products/ai-machine-learning/gemini-robotics-embodied-reasoning-2-is-now-available-on-google-cloud",
+                "source": "cloud.google.com",
+                "summary": "Earlier this year, we introduced Gemini Robotics 2 — our next-generation intelligence layer enabling robots to think, act, and adapt in the physical world. At the core of this breakthrough is Gemini Robotics Embodied Reasoning 2 (ER 2), a specialized Gemini model that serves as a robot’s high-level brain. Working across any robot embodiment — from stationary arms to full humanoids — Gemini Robotics ER 2 combines advanced spatial and temporal video understanding with long-horizon planning and [...] Gemini Robotics ER 2 transforms a robot into a physical agent. The model combines deep spatio-temporal reasoning and long-horizon planning, enabling robots to orchestrate steps to complete a task, self-correct, and generalize to novel situations. To build an agentic setup, developers can declare low-level control interfaces — like Vision-Language-Action (VLA) models or navigation APIs — as tools, and stream multimodal video, audio, or text directly into the model. [...] Today, we are bringing this same frontier embodied reasoning model to enterprise production environments: Gemini Robotics ER 2 is now available in public preview on the Gemini platform. For the first time, organizations can pair Google DeepMind’s latest embodied reasoning model for robotics with the enterprise-grade security, multi-agent orchestration, and end-to-end lifecycle management of Google Cloud — making it easier to simulate, evaluate, and deploy safe, adaptive physical AI at scale.",
+                "score": 0.44521654
+              },
+              {
+                "title": "Investing in Eka Robotics | Andreessen Horowitz",
+                "url": "https://a16z.com/announcement/investing-in-eka-robotics",
+                "source": "a16z.com",
+                "summary": "That changes the nature of manipulation. A grasp that starts to slip can be corrected. Contact with a surface can help locate an object. Resistance during insertion can change the robot’s motion rather than simply trigger an error.\n\nThe goal is to preserve performance as conditions change without requiring an engineer to retune the robot for every material, object or fit.\n\nThat ability to recover from variation is what can move robotics from controlled automation toward general physical work. [...] The next major frontier in robotics isn’t simply machines that see and understand the world. It’s machines that can interact with it, adapt to it and perform reliably at economically meaningful speed. If dexterity becomes a general capability rather than something engineers have to painstakingly program for every task, the boundary of economically automatable work expands dramatically.\n\nWe believe Eka is building that capability. [...] Much of modern robotics learns from human demonstrations, whereby the robot learns its “policy” for how to behave in a given situation. This has produced impressive progress so far, and we don’t want to be unappreciative, but physical demonstrations have two inherent problems. First, they take up human time; so you can’t practically show a human demonstrating one million different slight variations on picking up an egg. Second, it’s hard for humans to demonstrate all of the ways you can fail at",
+                "score": 0.43510985
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_max_results_arg",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_max_results",
+        "difficulty": "easy",
+        "what_it_tests": "Trích đúng max_results=8 từ '8 bài báo' và gọi lookup (web)."
+      },
+      "input": "Tìm giúp mình 8 bài báo về OpenAI",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "max_results": 8
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "general",
+              "max_results": 8
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "OpenAI",
+            "topic": "general",
+            "max_results": 8
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "OpenAI",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "OpenAI",
+                "url": "https://tavily.com/knowledge/company/p4PyTakV77G9",
+                "source": "tavily.com",
+                "summary": "# OpenAI\nID: p4PyTakV77G9\nWebsite: www.openai.com\nHeadquarters: San Francisco, CA, United States\nLinkedIn: www.linkedin.com/company/openai · 11,529,792 followers\nIndustry: Research Services\nIndustry codes: SIC 87, 873, NAICS 54, 541\nCompany type: Partnership\nSocial profiles: www.facebook.com/openai, www.twitter.com/openai, www.crunchbase.com/organization/openai, www.instagram.com/openai.gpt, www.instagram.com/openai, www.youtube.com/@openai, www.youtube.com/openai, github.com/openai [...] Description: OpenAI is a company that believes in research and development to lead to artificial general intelligence, a system that can solve human-level problems. [...] ## Products and services\nKeywords: research & development, emerging ai software, openai, artificial intelligence machine learning, artificial general intelligence, development, research, human-level problems, technology, application-software, artificial-intelligence, platform",
+                "score": 0.90593183
+              },
+              {
+                "title": "OpenAI (@OpenAI) / X",
+                "url": "https://www.x.com/OpenAI",
+                "source": "x.com",
+                "summary": "Title: OpenAI (@OpenAI) / X\n# OpenAI. OpenAI’s mission is to ensure that artificial general intelligence benefits all of humanity. We’re hiring: openai.com/jobs. 4 Following5.5M Followers7 Affiliates. ## OpenAI’s posts. GPT-6.1 Terra: delivering fast and capable computer use at a lower price. GPT-6.1 Terra understands what’s on screen, takes action across apps, writes naturally, and is a more capable model for your whole workday with the efficiency to take on more of it. Introducing GPT‑6 Cyber: a major advance in security research that pairs stronger capabilities with better model alignment. The model powered the Linux kernel research we announced yesterday, and security teams at companies like Mozilla, Palo Alto Networks, Calif, and. Images, upgraded—introducing ChatGPT Images 2.6. Now with GIFs and reference images. Plus, two new models are coming to the API with 50% faster image generation. Our security researchers built an autonomous cyber vulnerability discovery, exploitation, and patching pipeline. In a single run with an upcoming cyber model, it validated and generated patches for 948 local privilege escalation vulnerabilities in the Linux kernel at a total API. ChatGPT and Codex are helping engineers build for the physical world. We’re sharing our progress across mechanical design, electrical engineering, and simulation—from helping our hardware teams iterate faster to testing new workflows with industry collaborators.",
+                "score": 0.7311551
+              },
+              {
+                "title": "Openai News: Openai Latest News, Openai Today news, Openai Breaking News | The Financial Express",
+                "url": "https://www.financialexpress.com/about/openai",
+                "source": "financialexpress.com",
+                "summary": "OpenAI changes data centre policy after US voters push back against AI expansion  \n\nOpenAI goes beyond code\n\nRaktKhoj, an AI tool developed by two Chandigarh professionals, connects blood donors with patients via WhatsApp, addressing blood shortages and…\n\nOpenAI AI incidents  \n\nOpenAI defends firing three safety researchers after ‘significant breach of trust’ [...] More than a decade since retirement, Sachin Tendulkar’s endorsement scoreboard keeps ticking  \n\nStill betting big on the little master Premium Story\n\nOpenAI partners with cricket legend Sachin Tendulkar to promote AI adoption in India, leveraging his trusted image across 25+ brands…\n\nIndia is building capacity too, with over $300 billion pledged by 2030, Anarock reckons.  \n\nGood technology, bad credit [...] Compare Sarvam Vision 2.1 and ChatGPT’s free tier on OCR, Indic scripts, tables and general chat to see which tool…\n\nOpenAI warns organisations after AI agents access websites.  \n\nOpenAI pauses AI model training second time in 3 months after agents access govt websites\n\nOpenAI has paused training of its latest AI models after autonomous agents accessed government sites, used exposed credentials, and copied…\n\nTrump, UN clash over how to control AI",
+                "score": 0.5428881
+              },
+              {
+                "title": "OpenAI",
+                "url": "https://docs.umbrellacost.io/docs/openai",
+                "source": "docs.umbrellacost.io",
+                "summary": "For AI agents: the docs index is at  Append .md to any documentation page URL to get its markdown version.\n\nJump to Content\n\nUmbrella Cost\n\nHomeDocumentationRecipesAPI ReferenceChangelogSubmit a requestSupport Sign in\n\nUmbrella Cost\n\n1. AI Integrations\n\n# OpenAI\n\n## Overview\n\nConnect your OpenAI Platform organization and get OpenAI API cost and usage in the same views as your cloud and other AI spend - cost per model, project, API key, and member, with daily granularity. [...] > 📘\n>\n> ### Member names and emails\n>\n> Per-member attribution includes names and email addresses when your organization's privacy setting allows it. If the setting is off, member-level rows are anonymized.\n\n## Which OpenAI product is supported\n\n| OpenAI product | Status |\n --- |\n| OpenAI Platform (API usage) | Available |\n| OpenAI Codex | Coming soon |\n| ChatGPT Enterprise | Coming soon | [...] | Field | What it is |\n --- |\n| Onboard this account to | Choose A customer (then pick the customer name) or My organization. |\n| Display account name | Label this connection carries in Umbrella (e.g. Acme OpenAI). This label identifies the connection throughout Umbrella Cost. |\n| OpenAI connection type | Choose OpenAI Platform. Codex and ChatGPT Enterprise are disabled with a Coming soon chip. |\n\nClick Continue.\n\n## Step 2: OpenAI Platform setup",
+                "score": 0.44927242
+              },
+              {
+                "title": "OpenAI on X: \"ChatGPT and Codex are helping engineers build for the physical world. We’re sharing our progress across mechanical design, electrical engineering, and simulation—from helping our hardware teams iterate faster to testing new workflows with industry collaborators.\" / X",
+                "url": "https://x.com/openai/status/2117692475775258785",
+                "source": "x.com",
+                "summary": "Nov 3\n\n  We’re also working with engineers at Chip Ganassi Racing to turn 3D scans into editable CAD models and manufacturing drawings, and with Mazda to explore new vehicle designs through simulation. Engineers review the outputs and help identify where the models need to improve.\n\n  \n\n  00:00\n\n  29\n\n  @OpenAI\n\n  OpenAI@OpenAI\n\n  Nov 3\n\n  These are early steps, and we’re looking for engineers, engineering firms, and software partners to help shape what comes next. [...] @OpenAI\n\n@OpenAI\n\nChatGPT and Codex are helping engineers build for the physical world. We’re sharing our progress across mechanical design, electrical engineering, and simulation—from helping our hardware teams iterate faster to testing new workflows with industry collaborators.\n\n00:00\n\n6:56 PM · Nov 3, 2026·1.3M\n\nViews\n\n735\n\n @OpenAI\n\n  OpenAI@OpenAI [...] Log inSign up\n\n## Post\n\nLog inSign up\n\n# OpenAI on X: \"ChatGPT and Codex are helping engineers build for the physical world. We’re sharing our progress across mechanical design, electrical engineering, and simulation—from helping our hardware teams iterate faster to testing new workflows with industry collaborators.\"\n\n## Conversation\n\n@OpenAI\n\n@OpenAI",
+                "score": 0.4071218
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_unnecessary_tool_greeting",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "no_tool_smalltalk",
+        "difficulty": "easy",
+        "what_it_tests": "Chào hỏi/cảm ơn -> trả lời thẳng, KHÔNG gọi tool."
+      },
+      "input": "Xin chào, cảm ơn bạn nhé!",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin chào! Bạn cần giúp gì hôm nay?",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu nấu ăn ngoài phạm vi research/news -> KHÔNG gọi tool."
+      },
+      "input": "Cho mình công thức nấu phở bò với.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Dưới đây là công thức nấu phở bò đơn giản:\n\n### Nguyên liệu:\n- 500g thịt bò (thịt bắp hoặc thịt gầu)\n- 1kg xương bò\n- 1 củ hành tây\n- 1 củ gừng\n- 2-3 thanh quế\n- 3-4 hoa hồi\n- 1-2 nhánh thảo quả\n- 1-2 muỗng cà phê muối\n- 1-2 muỗng cà phê đường\n- 1 gói gia vị phở (nếu có)\n- Bánh phở tươi hoặc khô\n- Rau thơm (húng quế, ngò gai, giá đỗ)\n- Chanh, ớt tươi\n\n### Cách làm:\n1. **Nấu nước dùng**:\n   - Rửa sạch xương bò, cho vào nồi nước sôi khoảng 5-10 phút để loại bỏ tạp chất, sau đó vớt ra.\n   - Cho xương vào nồi lớn, đổ nước vào ngập xương, thêm hành tây và gừng đã nướng sơ qua.\n   - Đun sôi, sau đó hạ lửa nhỏ và ninh trong khoảng 2-3 giờ để nước dùng ngọt và trong.\n\n2. **Chuẩn bị thịt bò**:\n   - Thịt bò rửa sạch, có thể thái lát mỏng hoặc để nguyên miếng tùy thích.\n   - Nếu thích ăn tái, bạn có thể cho thịt vào nồi nước dùng trong 5-10 phút trước khi tắt bếp.\n\n3. **Nêm gia vị**:\n   - Khi nước dùng đã ninh đủ thời gian, bạn cho quế, hoa hồi, thảo quả, muối, đường vào nồi. Nêm nếm lại cho vừa khẩu vị.\n\n4. **Luộc bánh phở**:\n   - Nếu dùng bánh phở khô, bạn cần luộc qua nước sôi cho mềm. Nếu dùng bánh phở tươi, chỉ cần trụng qua nước sôi.\n\n5. **Trình bày**:\n   - Cho bánh phở vào tô, xếp thịt bò lên trên, sau đó chan nước dùng nóng lên.\n   - Trang trí với rau thơm, chanh, ớt tươi.\n\nChúc bạn thành công với món phở bò!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_missing_info_vague_search",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_topic",
+        "difficulty": "medium",
+        "what_it_tests": "Không nêu chủ đề -> clarify (text) hỏi chủ đề, KHÔNG đoán bừa."
+      },
+      "input": "Tìm tin tức giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn tìm tin tức về chủ đề gì?"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "missing_info",
+        "failures": [
+          "response_type: expected 'text', got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn tìm tin tức về chủ đề gì?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tìm tin tức về chủ đề gì?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_confirm_before_send_email",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_write",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu gửi ra ngoài -> clarify yes_no xin xác nhận, KHÔNG gọi send trực tiếp."
+      },
+      "input": "Gửi bản tóm tắt hôm nay lên kênh Telegram của team",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cho biết nội dung cụ thể mà bạn muốn gửi lên kênh Telegram không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "response_type: expected 'yes_no', got 'text'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cho biết nội dung cụ thể mà bạn muốn gửi lên kênh Telegram không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cho biết nội dung cụ thể mà bạn muốn gửi lên kênh Telegram không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_switch_to_social_top",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ web sang Twitter: social_search, search_type=Top ('nổi bật'), limit=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin tức về Anthropic tuần này"
+        },
+        {
+          "role": "user",
+          "content": "Giờ cho mình xem các tweet nổi bật nhất về Anthropic trên Twitter, 3 bài thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Anthropic",
+              "search_type": "Top",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Anthropic",
+              "search_type": "Top",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Anthropic",
+            "search_type": "Top",
+            "limit": 3
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Anthropic",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "this is the most dangerous thing on the internet today...",
+                "summary": "this is the most dangerous thing on the internet today...\n\nthe Ultimate Free AI Curriculum That Replaces Your Degree. 350+ Courses, 5000+ Lectures. the exact knowledge Anthropic pays $600,000 a year for\n\nJust dropped completely FREE\n\n1\\ Deep Learning from Hinton, Karpathy, Ng, LeCun\n2\\ Machine Learning fundamentals\n3\\ Optimization\n4\\ Reinforcement Learning from Silver and Levine\n5\\ Probabilistic Graphical Models\n6\\ Bayesian Deep Learning\n7\\ Graph Neural Networks\n8\\ NLP\n9\\ Speech Recognition\n10\\ Modern Computer Vision\n11\\ And a bird’s eye view of AGI\n\nAll from the best university courses and researchers in the field\n\nBookmark this and start building real depth ⭣",
+                "url": "https://x.com/mentalium_/status/2117992546966057468",
+                "source": "@mentalium_",
+                "date": "Wed Nov 04 14:49:08 +0000 2026",
+                "metrics": {
+                  "favorites": 323,
+                  "retweets": 50,
+                  "views": "11605"
+                }
+              },
+              {
+                "title": "Learn AI for free directly from top companies.",
+                "summary": "Learn AI for free directly from top companies.\n\n1 - Anthropic:  \nhttps://t.co/9EduZDcj9Z\n\n2 - Google:  \nhttps://t.co/99Czpf5KKs\n\n3 - Meta:  \nhttps://t.co/dBBKUQueyj\n\n4 - NVIDIA:  \nhttps://t.co/8jpLrGJzxy\n\n5 - Microsoft:  \nhttps://t.co/wmK2R8oilJ\n\n6 - OpenAI:  \nhttps://t.co/ifQ8cEx0Qt\n\n7 - IBM:  \nhttps://t.co/QFGI0v8Cqa\n\n8 - AWS:  \nhttps://t.co/nati5WaARH\n\n9 - https://t.co/0vjKn1mtg2:  \nhttps://t.co/bOlcLMfgyd\n\n10 - Hugging Face:  \nhttps://t.co/bmSTfzCvB4\n\nComment \"Learning\" if you find this helpful.\n\nRepost so others can take help.\n\nMust bookmark for future reference.\n\nMust Follow @sripathiteja4 for more",
+                "url": "https://x.com/sripathiteja4/status/2119997452287951134",
+                "source": "@sripathiteja4",
+                "date": "Tue Nov 10 03:35:54 +0000 2026",
+                "metrics": {
+                  "favorites": 188,
+                  "retweets": 52,
+                  "views": "5127"
+                }
+              },
+              {
+                "title": "10 Completely FREE AI Courses for 2026:",
+                "summary": "10 Completely FREE AI Courses for 2026:\n\n1. Anthropic: https://t.co/9EduZDcj9Z\n2. Google: https://t.co/99Czpf5KKs\n3. Meta: https://t.co/amxI7xsz2z\n4. NVIDIA: https://t.co/VFLzPxS6Yq\n5. Microsoft: https://t.co/DXUU02mhGU\n6. OpenAI: https://t.co/ifQ8cEx0Qt\n7. IBM: https://t.co/QFGI0v8Cqa\n8. AWS: https://t.co/nati5WaARH\n9. DeepLearningAI: https://t.co/bOlcLMfgyd\n10. Hugging Face: https://t.co/bmSTfzCvB4\n\nFollow @sripathiteja4 for more",
+                "url": "https://x.com/sripathiteja4/status/2117812188337598662",
+                "source": "@sripathiteja4",
+                "date": "Wed Nov 04 02:52:27 +0000 2026",
+                "metrics": {
+                  "favorites": 258,
+                  "retweets": 81,
+                  "views": "9682"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T01_route_wikipedia",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_wikipedia",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi tiểu sử/định nghĩa nền tảng -> wikipedia, không phải lookup."
+      },
+      "input": "Alan Turing là ai?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Alan_Turing",
+              "lang": "vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "title": "Alan_Turing",
+            "lang": "vi"
+          },
+          "result": {
+            "tool": "wikipedia_summary",
+            "title": "Alan_Turing",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Alan Turing",
+                "url": "https://vi.wikipedia.org/wiki/Alan_Turing",
+                "source": "vi.wikipedia.org",
+                "summary": "Alan Mathison Turing OBE FRS là một nhà toán học, logic học và mật mã học người Anh, được xem là một trong những nhà tiên phong của ngành khoa học máy tính và A.I. Phép thử Turing là một trong những cống hiến lớn nhất của ông trong ngành trí tuệ nhân tạo: thử thách này đặt ra câu hỏi rằng máy móc có khi nào đạt được ý thức và có thể suy nghĩ được hay không. Ông đã hình thức hóa khái niệm thuật toán và tính toán với máy Turing, đồng thời đưa ra phiên bản của \"Turing\", mà ngày nay được đông đảo công chúng chấp nhận, về luận đề Church-Turing, một luận đề nói rằng tất cả những gì tính được bằng thuật toán đều có thể tính được bằng máy Turing."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T02_route_hackernews",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_hackernews",
+        "difficulty": "medium",
+        "what_it_tests": "Nhắc rõ Hacker News -> hackernews với sort=date, limit=3."
+      },
+      "input": "Cho mình 3 bài mới nhất về Rust trên Hacker News",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort": "date",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Rust",
+            "sort": "date",
+            "limit": 3
+          },
+          "result": {
+            "tool": "search_hackernews",
+            "query": "Rust",
+            "sort": "date",
+            "items": [
+              {
+                "title": "Memory Safety Bugs in Rust Standard Library",
+                "url": "https://forge-blog.github.io/posts/rust-std-memory-safety/",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments, by matt_d",
+                "date": "2026-11-10T17:14:20Z"
+              },
+              {
+                "title": "Show HN: Propylea – Sub-microsecond L7 reverse proxy and active defense in Rust",
+                "url": "https://github.com/rmediatech/propylea",
+                "source": "news.ycombinator.com",
+                "summary": "2 points, 0 comments, by rickplus",
+                "date": "2026-11-10T17:01:19Z"
+              },
+              {
+                "title": "Anthropic IPO Roadshow",
+                "url": "https://www.netroadshow.com/custom/IPO/Anthropic/retail/agenda.html",
+                "source": "news.ycombinator.com",
+                "summary": "2 points, 0 comments, by iLuddite",
+                "date": "2026-11-10T16:59:45Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T03_route_current_time",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_current_time",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi giờ hiện tại -> current_time với timezone Asia/Tokyo."
+      },
+      "input": "Bây giờ ở Tokyo là mấy giờ?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "Asia/Tokyo"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "current_time",
+            "args": {
+              "timezone": "Asia/Tokyo"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "current_time",
+          "args": {
+            "timezone": "Asia/Tokyo"
+          },
+          "result": {
+            "tool": "get_current_time",
+            "error": "ValueError",
+            "message": "unknown timezone 'Asia/Tokyo', use an IANA name like Asia/Ho_Chi_Minh or UTC"
+          }
+        }
+      ]
+    }
+  ]
+}

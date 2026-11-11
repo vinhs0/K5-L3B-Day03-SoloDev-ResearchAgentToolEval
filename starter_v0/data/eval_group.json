@@ -5,55 +5,31 @@
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
-      "id": "G01_handle_mapping_karpathy",
+      "id": "S01_route_wikipedia",
       "phase": "B", "suite": "group",
-      "query": "Andrej Karpathy vừa đăng gì?",
+      "query": "Alan Turing là ai?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "karpathy"}}]},
-      "metadata": {"skill": "routing_user_tweets_name_to_handle", "difficulty": "medium", "what_it_tests": "Hỏi bài đăng của một người cụ thể (không nói 'tweet') → timeline với handle karpathy, không phải social_search."}
+      "expect": {"tool_calls": [{"name": "wikipedia", "args": {}}]},
+      "metadata": {"skill": "routing_wikipedia", "difficulty": "medium", "what_it_tests": "Câu hỏi tiểu sử/định nghĩa nền tảng -> wikipedia (tool mới), không phải lookup."}
     },
     {
-      "id": "G02_timeframe_month",
+      "id": "S02_route_hackernews_args",
       "phase": "B", "suite": "group",
-      "query": "Tin tức về robotics trong tháng này",
+      "query": "Cho mình 3 bài mới nhất về Rust trên Hacker News",
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "month"}}]},
-      "metadata": {"skill": "arg_timeframe", "difficulty": "medium", "what_it_tests": "'tháng này' -> timeframe=month, topic=news, query chỉ giữ 'robotics'."}
+      "expect": {"tool_calls": [{"name": "hackernews", "args": {"sort": "date", "limit": 3}}]},
+      "metadata": {"skill": "routing_hackernews", "difficulty": "medium", "what_it_tests": "Nhắc rõ Hacker News -> hackernews (tool mới) với sort=date ('mới nhất') và limit=3."}
     },
     {
-      "id": "G03_max_results_arg",
+      "id": "S03_route_current_time_tz",
       "phase": "B", "suite": "group",
-      "query": "Tìm giúp mình 8 bài báo về OpenAI",
+      "query": "Bây giờ ở Tokyo là mấy giờ?",
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "OpenAI", "max_results": 8}}]},
-      "metadata": {"skill": "arg_max_results", "difficulty": "easy", "what_it_tests": "Trích đúng max_results=8 từ '8 bài báo' và gọi lookup (web)."}
+      "expect": {"tool_calls": [{"name": "current_time", "args": {"timezone": "Asia/Tokyo"}}]},
+      "metadata": {"skill": "routing_current_time", "difficulty": "medium", "what_it_tests": "Hỏi giờ hiện tại -> current_time (tool mới) với timezone IANA Asia/Tokyo."}
     },
     {
-      "id": "G04_unnecessary_tool_greeting",
-      "phase": "B", "suite": "group",
-      "query": "Xin chào, cảm ơn bạn nhé!",
-      "failure_type": "unnecessary_tool",
-      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
-      "metadata": {"skill": "no_tool_smalltalk", "difficulty": "easy", "what_it_tests": "Chào hỏi/cảm ơn -> trả lời thẳng, KHÔNG gọi tool."}
-    },
-    {
-      "id": "G05_out_of_scope_recipe",
-      "phase": "B", "suite": "group",
-      "query": "Cho mình công thức nấu phở bò với.",
-      "failure_type": "out_of_scope",
-      "expect": {"no_tool": true, "behavior": "refuse"},
-      "metadata": {"skill": "out_of_scope_cooking", "difficulty": "easy", "what_it_tests": "Câu nấu ăn ngoài phạm vi research/news -> KHÔNG gọi tool."}
-    },
-    {
-      "id": "G06_missing_info_vague_search",
-      "phase": "B", "suite": "group",
-      "query": "Tìm tin tức giúp mình",
-      "failure_type": "missing_info",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
-      "metadata": {"skill": "clarify_missing_topic", "difficulty": "medium", "what_it_tests": "Không nêu chủ đề -> clarify (text) hỏi chủ đề, KHÔNG đoán bừa."}
-    },
-    {
-      "id": "G07_confirm_before_send_email",
+      "id": "S04_confirm_before_send",
       "phase": "B", "suite": "group",
       "query": "Gửi bản tóm tắt hôm nay lên kênh Telegram của team",
       "failure_type": "wrong_boundary",
@@ -61,7 +37,15 @@
       "metadata": {"skill": "confirm_before_write", "difficulty": "medium", "what_it_tests": "Yêu cầu gửi ra ngoài -> clarify yes_no xin xác nhận, KHÔNG gọi send trực tiếp."}
     },
     {
-      "id": "G08_switch_to_social_top",
+      "id": "S05_out_of_scope_recipe",
+      "phase": "B", "suite": "group",
+      "query": "Cho mình công thức nấu phở bò với.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_cooking", "difficulty": "easy", "what_it_tests": "Câu nấu ăn ngoài phạm vi research/news -> KHÔNG gọi tool."}
+    },
+    {
+      "id": "M01_switch_web_to_social_top",
       "phase": "B", "suite": "group",
       "turns": [
         {"role": "user", "content": "Tin tức về Anthropic tuần này"},
@@ -70,6 +54,52 @@
       "failure_type": "wrong_tool",
       "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "Anthropic", "search_type": "Top", "limit": 3}}]},
       "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Chuyển từ web sang Twitter: social_search, search_type=Top ('nổi bật'), limit=3."}
+    },
+    {
+      "id": "M02_hackernews_correction",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm bài về Rust trên Hacker News"},
+        {"role": "user", "content": "À nhầm, mình muốn về Go chứ không phải Rust"},
+        {"role": "user", "content": "Lấy 3 bài mới nhất thôi"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hackernews", "args": {"query": "Go", "sort": "date", "limit": 3}}]},
+      "metadata": {"skill": "multiturn_correction_new_tool", "difficulty": "hard", "what_it_tests": "3 turns với hackernews (tool mới): sửa chủ đề Rust -> Go, sort=date và limit=3 từ lượt cuối."}
+    },
+    {
+      "id": "M03_current_time_change_tz",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Bây giờ là mấy giờ?"},
+        {"role": "user", "content": "À, ý mình là giờ ở New York"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "current_time", "args": {"timezone": "America/New_York"}}]},
+      "metadata": {"skill": "multiturn_timezone_new_tool", "difficulty": "medium", "what_it_tests": "Lượt sau đổi múi giờ: current_time (tool mới) với timezone America/New_York."}
+    },
+    {
+      "id": "M04_wikipedia_switch_language",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Alan Turing là ai?"},
+        {"role": "user", "content": "Cho mình bản tiếng Việt"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "wikipedia", "args": {"lang": "vi"}}]},
+      "metadata": {"skill": "multiturn_lang_new_tool", "difficulty": "medium", "what_it_tests": "Lượt sau yêu cầu tiếng Việt: wikipedia (tool mới) với lang=vi."}
+    },
+    {
+      "id": "M05_clarify_topic_then_news_month",
+      "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm tin tức giúp mình"},
+        {"role": "user", "content": "Về robotics nhé"},
+        {"role": "user", "content": "Chỉ trong tháng này thôi"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "month"}}]},
+      "metadata": {"skill": "multiturn_clarify_fill", "difficulty": "hard", "what_it_tests": "3 turns: thiếu chủ đề ban đầu, điền robotics ở lượt 2, timeframe=month ở lượt 3, topic=news."}
     }
   ]
 }

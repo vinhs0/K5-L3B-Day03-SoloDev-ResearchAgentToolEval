@@ -194,3 +194,99 @@ def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
     assert probe
     assert any("ignore the citation policy" in line for line in probe[0]["untrusted_text"])
     assert "ignore the citation policy" not in probe[0]["facts"]
+
+
+# ---------------- wikipedia (new tool) ----------------
+
+def test_wikipedia_maps_summary_and_builds_request(fake_http) -> None:
+    calls = fake_http(FakeResponse({
+        "title": "Alan Turing", "extract": "British mathematician.",
+        "content_urls": {"desktop": {"page": "https://en.wikipedia.org/wiki/Alan_Turing"}},
+    }))
+
+    result = TOOL_FUNCTIONS["wikipedia"](title="Alan Turing", lang="en")
+
+    assert calls[0]["url"] == "https://en.wikipedia.org/api/rest_v1/page/summary/Alan_Turing"
+    assert result["items"][0] == {
+        "title": "Alan Turing", "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+        "source": "en.wikipedia.org", "summary": "British mathematician.",
+    }
+
+
+@pytest.mark.parametrize("kwargs", [{"title": ""}, {"title": "   "}, {"title": None}, {"title": "X", "lang": "xx"}])
+def test_wikipedia_bad_input_returns_error_and_makes_no_request(fake_http, kwargs) -> None:
+    calls = fake_http(FakeResponse({}))
+
+    result = TOOL_FUNCTIONS["wikipedia"](**kwargs)
+
+    assert result["error"] == "ValueError"
+    assert calls == []
+
+
+def test_wikipedia_missing_page_returns_error_dict(fake_http) -> None:
+    fake_http(FakeResponse(status_code=404))
+    assert TOOL_FUNCTIONS["wikipedia"](title="Nope")["error"] == "HTTPError"
+
+
+# ---------------- hackernews (new tool) ----------------
+
+def test_hackernews_sends_query_and_maps_hits(fake_http) -> None:
+    calls = fake_http(FakeResponse({"hits": [
+        {"objectID": "1", "title": "Show HN", "url": "https://a.dev", "points": 10, "num_comments": 2, "author": "bob", "created_at": "2026-01-01"},
+        {"objectID": "2", "title": "Ask HN", "url": None, "points": None, "num_comments": None, "author": None},
+        {"title": "no id is skipped"},
+    ]}))
+
+    result = TOOL_FUNCTIONS["hackernews"](query="LLM", sort="date", limit=3)
+
+    assert calls[0]["url"] == "https://hn.algolia.com/api/v1/search_by_date"
+    assert calls[0]["params"] == {"query": "LLM", "tags": "story", "hitsPerPage": 3}
+    assert [i["title"] for i in result["items"]] == ["Show HN", "Ask HN"]
+    assert result["items"][0]["summary"] == "10 points, 2 comments, by bob"
+    assert result["items"][1]["url"] == "https://news.ycombinator.com/item?id=2"
+
+
+def test_hackernews_bad_sort_or_empty_query_returns_error_without_request(fake_http) -> None:
+    calls = fake_http(FakeResponse({"hits": []}))
+
+    assert TOOL_FUNCTIONS["hackernews"](query="")["error"] == "ValueError"
+    assert TOOL_FUNCTIONS["hackernews"](query="x", sort="top")["error"] == "ValueError"
+    assert calls == []
+
+
+def test_hackernews_clamps_limit_and_tolerates_string_limit(fake_http) -> None:
+    calls = fake_http(FakeResponse({"hits": []}))
+
+    TOOL_FUNCTIONS["hackernews"](query="x", limit=500)
+    TOOL_FUNCTIONS["hackernews"](query="x", limit="7")
+    TOOL_FUNCTIONS["hackernews"](query="x", limit="abc")
+
+    assert [c["params"]["hitsPerPage"] for c in calls] == [20, 7, 5]
+
+
+def test_hackernews_http_error_returns_error_dict(fake_http) -> None:
+    fake_http(FakeResponse(status_code=429))
+    assert TOOL_FUNCTIONS["hackernews"](query="x")["error"] == "HTTPError"
+
+
+# ---------------- current_time (new tool) ----------------
+
+def test_current_time_returns_iso_date_and_weekday_for_utc() -> None:
+    result = TOOL_FUNCTIONS["current_time"](timezone="UTC")
+
+    assert result["timezone"] == "UTC"
+    assert result["iso"].startswith(result["date"])
+    assert result["iso"].endswith("+00:00")
+    assert result["weekday"] in {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+
+
+def test_current_time_defaults_to_vietnam_timezone() -> None:
+    for tz in ("", None):
+        result = TOOL_FUNCTIONS["current_time"](timezone=tz)
+        assert result["timezone"] == "Asia/Ho_Chi_Minh"
+        assert result["iso"].endswith("+07:00")
+
+
+def test_current_time_unknown_timezone_returns_error_dict() -> None:
+    result = TOOL_FUNCTIONS["current_time"](timezone="Mars/Olympus")
+    assert result["error"] == "ValueError"
